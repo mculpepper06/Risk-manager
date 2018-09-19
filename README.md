@@ -10,12 +10,12 @@ In order to get the application just install the files from the Development fold
 
 ### Built With
 
-*HTML/CSS
-*JavaScript
-*C#
-*SQL 
-*Visual Studio
-*Highcharts
+* HTML/CSS
+* JavaScript
+* C#
+* SQL 
+* Visual Studio
+* Highcharts
 
 ## Authors
 
