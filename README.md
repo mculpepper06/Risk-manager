@@ -8,10 +8,14 @@ their clients stock and investments.
 The application was built, debugged, and deployed using Visual Studio. 
 In order to get the application just install the files from the Development folders.
 
-### Prerequisites
+### Built With
 
--SQL 
--Visual Studio
+*HTML/CSS
+*JavaScript
+*C#
+*SQL 
+*Visual Studio
+*Highcharts
 
 ## Authors
 
