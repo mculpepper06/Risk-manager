@@ -1,0 +1,73 @@
+﻿@model PorfolioRiskManager.Models.TopSectorsViewModel
+
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Top Sectors Report</h1>
+
+@{
+    SelectList selectList = new SelectList(Model.Portfolios, "PortfolioId", "Name", null);
+    <label>Select a Portfolio: </label>
+    @Html.DropDownList("portfolios", selectList)
+}
+
+    
+<div id="container" style="min-width: 310px; max-width: 900px; height: 600px; margin: 0 auto">
+
+
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        Highcharts.chart('container', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Top Sectors in Portfolio'
+            },
+            xAxis: {
+                categories: ['Industrials', 'Telecommunication', 'Energy', 'Information Systems', 'Consumer'],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Weight in Percent',
+                    align: 'high'
+                },
+                labels: { overflow: 'justify' }
+            },
+            tooltip: {
+                valueSuffix: ' millions'
+            },
+            plotOptions: {
+                bar: { dataLabels: { enabled: true } }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Sector Weights',
+                data: [10, 9, 8.5, 7, 6.9, 6.5, 5.4, 4.9]
+            }]
+        });
+
+    </script>
+}

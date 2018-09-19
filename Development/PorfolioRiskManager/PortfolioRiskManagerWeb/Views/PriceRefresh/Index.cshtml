@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Price Refresh";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="h2 text-center">Price Refresh</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            @using (Html.BeginForm("submit", "PriceRefresh", FormMethod.Post, new {id = "refreshPricesForm"}))
+            {
+                <input id="pricesubmit" class="btn btn-success" type="submit" value="Refresh Prices"/>
+            }
+        </div>
+        <div class="col-4">
+            <div id="progressbar" class="progress" style="margin-top: 10px; visibility: hidden">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;">Retrieving Prices...</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#pricesubmit").click(function() {
+                $("#progressbar").css("visibility","visible");
+                $("#refreshPricesForm").submit();
+                $("#pricesubmit").attr("disabled", "disabled");
+            });
+        });
+    </script>
+}

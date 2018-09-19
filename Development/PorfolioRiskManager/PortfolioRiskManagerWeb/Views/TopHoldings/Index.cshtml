@@ -1,0 +1,179 @@
+﻿@model List<PortfolioRiskManagerWeb.Models.PortfolioViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*/******************************************
+* Author: Fabian/Miranda*******************
+* Start: 08/08/18**************************
+* Update: 08/15/18*************************
+******************************************/*@
+
+<!-- this page displays the top holdings -->
+<div class="container">
+    <p class="h2 text-center">Top Holdings Report</p>
+    
+    <div class="form-group row">
+        <label for="portfolioselection" class="col-2 col-form-label">Select a Portfolio:</label>
+        <div class="col-sm-10">
+            <select id="portfolioselection" class="form-control " data-bind="options: $root.portfolios, value: id, optionsText: 'Name', value: selectedPortfolio"></select>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- show notification when updates to prices occur-->
+        <div id="dataupdatedalert" class="alert alert-warning alert-dismissible collapse" role="alert">
+            <strong>Data has been updated!</strong> You should refresh this page to get the latest version of the data.
+        </div>
+    </div>
+
+    <div class="row">
+        <table class=".table col-12" style="background-color: #202020; color: floralwhite">
+            <thead>
+            <tr>
+                <th style="text-align:center">Security Name</th>
+                <th style="text-align:center">Market Cap</th>
+                <th style="text-align:center">Last Price</th>
+                <th style="text-align:center">Volume</th>
+                <th style="text-align:center">Shares</th>
+                <th style="text-align:center">Sector</th>
+                <th style="text-align:center">Pos. MrktVal</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: $root.positions">
+            <tr>
+                <td col width="20%" data-bind="text:SecurityName" style="text-align:center;"></td>
+                <td col width="15%" data-bind="text:MarketCap" style="text-align:right;"></td>
+                <td col width="15%" data-bind="text:Price" style="text-align:right;"></td>
+                <td col width="15%" data-bind="text:Volume" style="text-align:right;"></td>
+                <td col width="15%" data-bind="text:Shares" style="text-align:right;"></td>
+                <td col width="20%" data-bind="text:SectorName" style="text-align:center;"></td>
+                <td col width="15%" data-bind="text:MarketValue" style="text-align:right;"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <!-- chart container -->
+        <div id="piechart" class="mx-auto" style=" margin-top: 10px">
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts {
+
+    @*<script src="signalr/hubs"></script>*@
+    <script src="~/Scripts/HighCharts/Highcharts-6.1.0/code/themes/dark-unica.src.js"></script>
+    <script type="text/javascript">
+        var portfolios = @Html.Raw(Json.Encode(Model));
+
+
+        function TopSectorsViewModel() {
+            var self = this;
+            self.positions = ko.observableArray([]);
+
+            self.portfolios = ko.observableArray(portfolios);
+            self.topsectorsData = [];
+            self.selectedPortfolio = ko.observable('');
+
+            self.selectedPortfolio.subscribe(function(newSelection) {
+                if (newSelection.PortfolioId !== 0) {
+
+                    $.ajax({
+                        url: '/api/PortfolioInfo/' + newSelection.PortfolioId,
+                        type: "Get",
+                        success: function(data) {
+                            self.positions.removeAll();
+                            var series = [];
+                            var positions = data.Positions;
+                            for (var i = 0, len = positions.length; i < len; i++) {
+                                self.positions.push(positions[i]);
+                                if (i === 1) {
+                                    var object = {
+                                        name: positions[i].SecurityName,
+                                        y: positions[i].Weight,
+                                        sliced: true,
+                                        selected: true
+                                    };
+                                    series.push(object);
+                                } else {
+                                    var object1 = {
+                                        name: positions[i].SecurityName,
+                                        y: positions[i].Weight
+                                    };
+                                    series.push(object1);
+                                }
+                            }
+                            DrawChart(series);
+                        },
+                        error: function(msg) {
+                            alert(msg);
+                        }
+                    });
+                }
+            });
+        }
+
+        var topsectorsModel = new TopSectorsViewModel();
+        ko.applyBindings(topsectorsModel);
+
+        function DrawChart(series) {
+            Highcharts.chart('piechart',
+                {
+					chart: {
+						align: 'center',
+						width: 700,
+						height: 500,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Top Holdings in Portfolio'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            dataLabels: {
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            },
+                            id: 'holdingsValues',
+                            name: 'Holdings',
+                            data: series
+                        }
+                    ]
+                });
+
+           Highcharts.setOptions(Highcharts.theme);
+        }
+
+        $(function () {
+            var connection = $.hubConnection();
+            var contosoChatHubProxy = connection.createHubProxy('contosoChatHub');
+            contosoChatHubProxy.on('addContosoChatMessageToPage',
+                function (message) {
+                    $('#dataupdatedalert').show();
+
+                });
+            connection.start().done(function () {
+
+            });
+        });
+    </script>
+}

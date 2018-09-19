@@ -1,0 +1,204 @@
+﻿@model List<PortfolioRiskManagerWeb.Models.PortfolioViewModel>
+@{
+	/******************************************
+	* Author: Miranda Culpepper****************
+	* Start: 07/25/18**************************
+	* Update: 08/15/18*************************
+	******************************************/
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- this page breaks positions down by country -->
+<div class="container">
+    <p class="h2 text-center">Portfolio By Country</p>
+    
+    <div class="form-group row">
+        <label for="portfolioselection" class="col-2 col-form-label">Select a Portfolio:</label>
+        <div class="col-sm-10">
+            <select id="portfolioselection" class="form-control " data-bind="options: $root.portfolios, value: id, optionsText: 'Name', value: selectedPortfolio"></select>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- show notification when updates to prices occur-->
+        <div id="dataupdatedalert" class="alert alert-warning alert-dismissible collapse" role="alert">
+            <strong>Data has been updated!</strong> You should refresh this page to get the latest version of the data.
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <!-- chart container -->
+        <div id="chart" class="col-12">
+
+
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <!-- data table -->
+        <table class="col-12" style="background-color: #383838; color: floralwhite;  margin-top: 10px">
+            <thead>
+            <tr>
+                <th>Security Name</th>
+                <th>Market Cap</th>
+                <th>Last Price</th>
+                <th>Volume</th>
+                <th>Country</th>
+                <th>Sector</th>
+                <th>Industry</th>
+                <th>Pos. MrktVal</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: $root.positions">
+            <tr>
+                <td col width="10%" data-bind="text:SecurityName"></td>
+                <td col width="10%" data-bind="text:MarketCap "></td>
+                <td col width="10%" data-bind="text:Price"></td>
+                <td col width="10%" data-bind="text:Volume"></td>
+                <td col width="10%" data-bind="text:CountryName"></td>
+                <td col width="10%" data-bind="text:SectorName"></td>
+                <td col width="15%" data-bind="text:IndustryName"></td>
+                <td col width="10%" data-bind="text:MarketValue"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+
+    @*<script src="signalr/hubs"></script>*@
+    <script src="~/Scripts/HighCharts/Highcharts-6.1.0/code/themes/dark-unica.js"></script>
+    <script type="text/javascript">
+        var portfolios = @Html.Raw(Json.Encode(Model));
+
+		// creates portfolio drop down menu
+        function ByCountryViewModel() {
+            var self = this;
+            self.positions = ko.observableArray([]);
+
+            self.portfolios = ko.observableArray(portfolios);
+            self.bycountryData = [];
+            self.selectedPortfolio = ko.observable('');
+
+            self.selectedPortfolio.subscribe(function(newSelection) {
+                if (newSelection.PortfolioId !== 0) {
+					// displays graph labels based on country info controller
+                    $.ajax({
+                        url: '/api/CountryInfo/' + newSelection.PortfolioId,
+                        type: "Get",
+                        success: function(data) {
+                            var weights = [];
+                            var labels = [];
+                            var bycountryWeights = data.Weights;
+                            for (var i = 0, len = bycountryWeights.length; i < len; i++) {
+                                weights.push(bycountryWeights[i].Weight * 100);
+                                labels.push(bycountryWeights[i].Name);
+                            }
+                            self.positions.removeAll();
+                            for (var i = 0, len = data.Positions.length; i < len; i++) {
+                                self.positions.push(data.Positions[i]);
+                            }
+                            DrawChart(weights, labels);
+                        },
+                        error: function(msg) {
+                            alert(msg);
+                        }
+                    });
+                }
+            });
+        }
+
+        var bycountryModel = new ByCountryViewModel();
+		ko.applyBindings(bycountryModel);
+
+		// highchart pie graph
+        function DrawChart(data, categories) {
+            var chart = Highcharts.chart('chart',
+                {
+                    chart: {
+						type: 'column',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: true,
+						showInLegend: true
+                    },
+                    title: {
+                        text: 'Holdings By Country'
+                    },
+                    xAxis: {
+                        id: 'seriescategories',
+                        categories: categories,
+                        title: {
+                            text: null
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Weight in Percent',
+                            align: 'high'
+                        },
+                        labels: {
+                            overflow: 'justify'
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: ' %'
+                    },
+                    plotOptions: {
+                        bar: {
+                            dataLabels: { enabled: true },
+
+
+                        }
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 80,
+                        floating: true,
+                        borderWidth: 1,
+                        shadow: true
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                        {
+							colorByPoint: true,
+							dataLabels: {
+                                format: '{point.y:.2f}%'
+                            },
+                            id: 'bycountryweightsValues',
+                            name: 'Country Weights',
+                            data: data
+                        }
+                    ]
+                });
+
+            Highcharts.setOptions(Highcharts.theme);
+        }
+
+        $(function () {
+            var connection = $.hubConnection();
+            var contosoChatHubProxy = connection.createHubProxy('contosoChatHub');
+            contosoChatHubProxy.on('addContosoChatMessageToPage',
+                function (message) {
+                    $('#dataupdatedalert').show();
+
+                });
+            connection.start().done(function () {
+
+            });
+        });
+    </script>
+}

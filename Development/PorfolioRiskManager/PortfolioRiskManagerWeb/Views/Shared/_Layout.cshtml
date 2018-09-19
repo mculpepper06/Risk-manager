@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Risk Manager</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script type='text/javascript'>
+        var appInsights=window.appInsights||function(config)
+        {
+            function r(config){ t[config] = function(){ var i = arguments; t.queue.push(function(){ t[config].apply(t, i)})} }
+            var t = { config:config},u=document,e=window,o='script',s=u.createElement(o),i,f;for(s.src=config.url||'//az416426.vo.msecnd.net/scripts/a/ai.0.js',u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=['Event','Exception','Metric','PageView','Trace','Ajax'];i.length;)r('track'+i.pop());return r('setAuthenticatedUserContext'),r('clearAuthenticatedUserContext'),config.disableExceptionTracking||(i='onerror',r('_'+i),f=e[i],e[i]=function(config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o),s}),t
+        }({
+            instrumentationKey:'7478b13a-ca25-4c19-8986-0cdf62186306'
+        });
+
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+            <a class="navbar-brand" href="~">
+                <img src="~/Content/img/icon.png" width="30" height="30" alt="">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">@Html.ActionLink("Top Holdings", "Index", "TopHoldings", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item active">@Html.ActionLink("Sector Weights", "Index", "TopSectors", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item active">@Html.ActionLink("Portfolio By Country", "Index", "PortfolioByCountry", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item active">@Html.ActionLink("Refresh Prices", "Index", "PriceRefresh", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item active">@Html.ActionLink("New Security", "Index", "NewSecurity", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item active">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link justify-content-end" })</li>
+                    <li class="nav-item active">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link justify-content-end" })</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </nav>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - ACME Corporation</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/highcharts")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/signalR")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

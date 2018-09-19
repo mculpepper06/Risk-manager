@@ -1,0 +1,129 @@
+﻿@*/******************************************
+* Author: Fabian Valencia******************
+* Start: 08/19/18 **************************
+* Update: 08/20/18 *************************
+******************************************/*@
+
+@model PortfolioRiskManagerWeb.Models.NewSecurityModel
+
+@{
+    ViewBag.Title = "New Security";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p class="h2 text-center">New Security</p>
+
+<form id="refreshPricesForm" class="needs-validation">
+    <div class="form-group">
+        <label for="securityName">Security Name:</label>
+        <input type="text" data-bind="textInput: securityName" class="form-control" id="securityName" required>
+        <div class="invalid-feedback">
+            Please provide a valid security name
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="symbol">Symbol:</label>
+        <input type="text" data-bind="textInput: symbol" class="form-control" id="symbol" required>
+        <div class="invalid-feedback">
+            Please provide a valid security symbol
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="marketCap">Marketcap:</label>
+        <input type="text" data-bind="textInput: marketCap" class="form-control" id="marketCap" required>
+        <div class="invalid-feedback">
+            Please provide a valid market cap
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="country">Country:</label>
+        <select id="country" class="form-control" data-bind="options: $root.countries, value: id, optionsText: 'Name', value:selectedCountry"></select>
+    </div>
+    <div class="form-group">
+        <label for="industry">Industry:</label>
+        <select id="industry" class="form-control" data-bind="options: $root.industries, value: id, optionsText: 'IndustryName', value:selectedIndustry"></select>
+    </div>
+    <div class="form-group">
+        <label for="industry">Portfolio:</label>
+        <select id="portfolio" class="form-control" data-bind="options: $root.portfolios, value: id, optionsText: 'Name', value: selectedPortfolio"></select>
+    </div>
+    <div class="form-group">
+        <label for="symbol">Shares:</label>
+        <input type="text" class="form-control" data-bind="textInput: shares" id="shares" required>
+        <div class="invalid-feedback">
+            Please provide a valid number of shares
+        </div>
+    </div>
+
+    <input id="submit" class="btn btn-primary" type="submit" value="Save Information" />
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            function NewSecurityModel() {
+                var self = this;
+                self.countries = ko.observableArray(@Html.Raw(Json.Encode(Model.Countries)));
+                self.industries = ko.observableArray(@Html.Raw(Json.Encode(Model.Industries)));
+                self.portfolios = ko.observableArray(@Html.Raw(Json.Encode(Model.Portfolios)));
+
+                self.selectedCountry = ko.observable('');
+                self.selectedIndustry = ko.observable('');
+                self.selectedPortfolio = ko.observable('');
+                self.securityName = ko.observable('');
+                self.marketCap = ko.observable('');
+                self.symbol = ko.observable('');
+                self.shares = ko.observable('');
+
+                self.saveInfo = function () {
+                    var name = self.securityName();
+                    var symbol = self.symbol();
+                    var shares = self.shares();
+                    var portfolio = self.selectedPortfolio().PortfolioId;
+                    var industry = self.selectedIndustry().IndustryId;
+                    var country = self.selectedCountry().CountryId;
+                    var marketcap = self.marketCap();
+
+                    var values = JSON.stringify([name, symbol, shares, portfolio, industry, country, marketcap]);
+                    $.ajax({
+                        url: "/api/AddSecurityToPortfolio",
+                        type: "Post",
+                        data: values, 
+                        contentType: 'application/json; charset=utf-8',
+                        success: function(data) {
+                            alert("Information has been stored successfully!");
+                        },
+                        error: function() {
+                             alert('error');
+                        }
+                    });
+                }
+            }
+
+            var newSecurityModel = new NewSecurityModel();
+            ko.applyBindings(newSecurityModel);
+
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms,
+                    function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                alert("false");
+                            } else {
+                                newSecurityModel.saveInfo();
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                        form.classList.add('was-validated');
+                    },
+                    false);
+                });
+            }, false);
+        });
+    </script>
+}

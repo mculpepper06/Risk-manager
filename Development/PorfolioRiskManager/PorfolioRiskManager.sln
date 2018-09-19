@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PorfolioRiskManager.Tests", "PorfolioRiskManager.Tests\PorfolioRiskManager.Tests.csproj", "{290A3FF3-A125-4D53-857C-F2D030039C17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioRiskManager.Domain", "PortfolioRiskManager.Domain\PortfolioRiskManager.Domain.csproj", "{681A07B5-7DDD-4313-9A5E-B2816880B010}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioRiskManager.DataAccess", "PortfolioRiskManager.DataAccess\PortfolioRiskManager.DataAccess.csproj", "{3A7B3F28-3C41-4176-BEE0-E64B29CBFCD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioRiskManagerWeb", "PortfolioRiskManagerWeb\PortfolioRiskManagerWeb.csproj", "{59D53CB1-2A62-464E-8B2B-42DB698EE910}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PortfolioRiskManager", "..\PortfolioRiskManager\PortfolioRiskManager.sqlproj", "{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{290A3FF3-A125-4D53-857C-F2D030039C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290A3FF3-A125-4D53-857C-F2D030039C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290A3FF3-A125-4D53-857C-F2D030039C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290A3FF3-A125-4D53-857C-F2D030039C17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{681A07B5-7DDD-4313-9A5E-B2816880B010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{681A07B5-7DDD-4313-9A5E-B2816880B010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{681A07B5-7DDD-4313-9A5E-B2816880B010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{681A07B5-7DDD-4313-9A5E-B2816880B010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7B3F28-3C41-4176-BEE0-E64B29CBFCD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7B3F28-3C41-4176-BEE0-E64B29CBFCD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7B3F28-3C41-4176-BEE0-E64B29CBFCD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7B3F28-3C41-4176-BEE0-E64B29CBFCD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D53CB1-2A62-464E-8B2B-42DB698EE910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D53CB1-2A62-464E-8B2B-42DB698EE910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D53CB1-2A62-464E-8B2B-42DB698EE910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D53CB1-2A62-464E-8B2B-42DB698EE910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09F6C9FF-D02B-4EC5-82F6-CAC1F83AE4FB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9076B8A2-E19F-4406-969C-3762FEE25CFA}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://fabianevalencia.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PorfolioRiskManager.Tests\\PorfolioRiskManager.Tests.csproj
+		SccProjectName1 = PorfolioRiskManager.Tests
+		SccLocalPath1 = PorfolioRiskManager.Tests
+		SccProjectUniqueName2 = PortfolioRiskManager.Domain\\PortfolioRiskManager.Domain.csproj
+		SccProjectName2 = PortfolioRiskManager.Domain
+		SccLocalPath2 = PortfolioRiskManager.Domain
+		SccProjectUniqueName3 = PortfolioRiskManager.DataAccess\\PortfolioRiskManager.DataAccess.csproj
+		SccProjectName3 = PortfolioRiskManager.DataAccess
+		SccLocalPath3 = PortfolioRiskManager.DataAccess
+		SccProjectUniqueName4 = PortfolioRiskManagerWeb\\PortfolioRiskManagerWeb.csproj
+		SccProjectName4 = PortfolioRiskManagerWeb
+		SccLocalPath4 = PortfolioRiskManagerWeb
+		SccProjectUniqueName5 = ..\\PortfolioRiskManager\\PortfolioRiskManager.sqlproj
+		SccProjectName5 = ../PortfolioRiskManager
+		SccLocalPath5 = ..\\PortfolioRiskManager
+	EndGlobalSection
+EndGlobal
