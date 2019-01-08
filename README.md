@@ -1,6 +1,5 @@
 # Portfolio Risk Manager
 
-Can be viewed at: https://porfolioriskmanager.azurewebsites.net/
 
 A simple web based application that stock/financial adivsors can use to manage
 their clients stock and investments. 
